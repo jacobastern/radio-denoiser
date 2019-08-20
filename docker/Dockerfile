@@ -27,9 +27,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     liblapack-dev \
     libpng-dev \
+    librtlsdr-dev \
     libswscale-dev \
     libzmq3-dev \
-    openslide-tools \
     pkg-config \
     protobuf-compiler \
     python3 \
@@ -63,20 +63,14 @@ RUN pip3 --no-cache-dir install \
     matplotlib \
     numpy \
     seaborn \
-    openslide-python \
     pprint \
     requests \
     scipy \
     setuptools \    
-    torchvision \
     xgboost \
     h5py \
-    torchtext \ 
     torch==1.1.0 -f https://download.pytorch.org/whl/cu100/stable \
     && python3 -m ipykernel.kernelspec
-
-#RUN TORCH_CUDA_ARCH_LIST="3.5 5.2 6.0 6.1 7.0+PTX" TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
-#    CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
 
 ENTRYPOINT ["/bin/bash"]
 
