@@ -58,7 +58,9 @@ def collect_radio(parent_queue, song_name, station='rock', dest='work/data', rat
         # Give sufficient time to disconnect from the device
         time.sleep(1)
         # Save the .raw file as a .wav file by adding a header
-        bash_command = 'ffmpeg -loglevel panic -i {} -ar {} -sample_fmt s16 -ac 1 {}'.format(raw_file_path, rate, wav_file_path)
+        bash_command = 'ffmpeg -loglevel panic -ar {} -f s16le -ac 1 -i {} {}'.format(rate, raw_file_path, wav_file_path)
+                        # 'ffmpeg -ar 44.1k -f s16le -ac 1 -i 2019_8_21_classical_radio_HaydnJohannMichaelHornConcertino.raw test1.wav'
+        # bash_command = 'ffmpeg -loglevel panic -i {} -ar {} -sample_fmt s16 -ac 1 {}'.format(raw_file_path, rate, wav_file_path)
         # bash_command = 'sox -r {} -e signed -b 16 -c 1 {} -r {} -e signed -b 16 -c 1 {}'.format(rate, raw_file_path, rate, wav_file_path)
         subprocess.run(bash_command.split())
         # Remove the original file
