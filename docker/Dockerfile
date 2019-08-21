@@ -55,21 +55,22 @@ RUN pip3 install pip --upgrade
 # install python dependencies
 RUN pip3 --no-cache-dir install \
     argparse \
-    opencv-python \
-    sklearn \
     cython \
+    h5py \
     ipykernel \
     jupyter \
     matplotlib \
+    noisereduce \
     numpy \
-    seaborn \
+    opencv-python \
     pprint \
     requests \
     scipy \
-    setuptools \    
-    xgboost \
-    h5py \
+    seaborn \
+    setuptools \  
+    sklearn \  
     torch==1.1.0 -f https://download.pytorch.org/whl/cu100/stable \
+    xgboost \
     && python3 -m ipykernel.kernelspec
 
 ENTRYPOINT ["/bin/bash"]

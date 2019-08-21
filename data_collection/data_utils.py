@@ -98,8 +98,8 @@ def get_song_name(station):
         else:
             # extract title from the metadata
             m = re.search(br"StreamTitle='([^']*)';", metadata)
-            title = m.group(1)
             if m:
+                title = m.group(1)
                 if title:
                     return convert_to_filestring(title.decode(encoding, errors='ignore'))
 
