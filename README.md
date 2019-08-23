@@ -31,12 +31,13 @@ nvidia-docker run -it --name data-collection --rm -v $(pwd):/code -v path/to/dat
     - Obtain the streaming url as described in [this video](https://www.youtube.com/watch?v=J3Es00azAT4).
 
 5. Run:
-
-        `python3 data_collect_main.py --frequency <radio_freq> --url <streaming_url> --format <streamed_format>`
-    For example,
-    
-        `python3 data_collect_main.py --frequency 89.1 --url http://cdn.byub.org/classical89/classical89_mp3 --format .mp3`
-
+```bash
+python3 data_collect_main.py --frequency <radio_freq> --url <streaming_url> --format <streamed_format>`
+```
+For example,
+```bash
+python3 data_collect_main.py --frequency 89.1 --url http://cdn.byub.org/classical89/classical89_mp3 --format .mp3`
+```
 A Note:
 
 `data_collect_main.py` collects streamed and broadcast radio in its native format and converts it to signed-16-bit-little-endian, 44.1kHz, single-channel `.wav` files. If it doesn't work with the default `--format`, which is `.aac`, try `.mp3`.
