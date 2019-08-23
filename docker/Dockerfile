@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     curl \
+    ffmpeg \
     g++ \
     git \
     graphicsmagick \
@@ -75,5 +76,6 @@ RUN pip3 --no-cache-dir install \
 
 ENTRYPOINT ["/bin/bash"]
 
+WORKDIR /code
 
 

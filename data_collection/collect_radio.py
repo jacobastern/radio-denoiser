@@ -16,7 +16,7 @@ def collect_radio(parent_queue, song_name, station='rock', dest='work/data', rat
     """
     
     if station == 'classical':
-        # 89.5 KBYU Classical
+        # 89.1 KBYU Classical
         # Note: the radio transmission is about 3 minutes ahead of the online stream
         freq = '89.1M'
     elif station == 'country':
@@ -38,7 +38,7 @@ def collect_radio(parent_queue, song_name, station='rock', dest='work/data', rat
     
     # -s Original sample rate: 170k
     # -r Resample to: 44.1k
-    # -f Tune to frequency: 89.5M
+    # -f Tune to frequency: 89.1M
     # -l 0 Disable squelch
     bash_command = 'rtl_fm -f {} -l 0 -g 40.2 -s 170k -r {} {}'.format(freq, rate, raw_file_path)
 
@@ -59,9 +59,6 @@ def collect_radio(parent_queue, song_name, station='rock', dest='work/data', rat
         time.sleep(1)
         # Save the .raw file as a .wav file by adding a header
         bash_command = 'ffmpeg -loglevel panic -ar {} -f s16le -ac 1 -i {} {}'.format(rate, raw_file_path, wav_file_path)
-                        # 'ffmpeg -ar 44.1k -f s16le -ac 1 -i 2019_8_21_classical_radio_HaydnJohannMichaelHornConcertino.raw test1.wav'
-        # bash_command = 'ffmpeg -loglevel panic -i {} -ar {} -sample_fmt s16 -ac 1 {}'.format(raw_file_path, rate, wav_file_path)
-        # bash_command = 'sox -r {} -e signed -b 16 -c 1 {} -r {} -e signed -b 16 -c 1 {}'.format(rate, raw_file_path, rate, wav_file_path)
         subprocess.run(bash_command.split())
         # Remove the original file
         bash_command = 'rm {}'.format(raw_file_path)

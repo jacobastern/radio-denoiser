@@ -6,14 +6,16 @@ from data_collection.collect_stream import collect_stream
 from data_collection.collect_radio import collect_radio
 from data_collection.data_utils import monitor_song_name, get_song_name
 
-def main(station='classical', dest='../../../../../../home/jastern33/audio_data', rate=44100, duration=60, break_on_song=False):
+def main(frequency=None, url=None, rate=44100, duration=30, dest='../data', station='classical', break_on_song=False):
     """Records music of a certain type simultaneously from an internet streaming service
     and over the radio.
     Args:
-        station (str): the type of music to record
-        dest (str): the destination to store the recorded audio
+        frequency (float): the FM radio frequency to record
+        url (str): the url to collect streamed audio
         rate (int): the sample rate at which to record
         duration (int): the maximum song length in minutes
+        dest (str): the destination to store the recorded audio
+        station (str): the type of music to record
         break_on_song (bool): whether to break on song changes
     """
     if not os.path.exists(dest):
@@ -45,23 +47,32 @@ def main(station='classical', dest='../../../../../../home/jastern33/audio_data'
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-s', '--station', required=False, type=str, default='classical', 
-                        help='The type of station to record.',
-                        choices=['classical', 'rock', 'country', 'talk'])
-    parser.add_argument('-d', '--dest', required=False, type=str, default='../../../../../../home/jastern33/audio_data', 
-                        help='The path for the recorded audio')
+    parser.add_argument('-f', '--frequency', required=False, type=float, default=None, 
+                        help='The FM frequency to record.')
+    parser.add_argument('-u', '--url', required=False, type=str, default=None, 
+                        help='The url for the streamed radio to record.')
+    # parser.add_argument('--format', required=False, type=str, default='.aac', 
+    #                     help='The audio format for the streamed audio.')
     parser.add_argument('-r', '--rate', required=False, type=int, default=44100, 
                         help='The sample rate for the recorded audio')
     parser.add_argument('--duration', required=False, type=float, default=30, 
                         help='The max song duration (in minutes)')
+    parser.add_argument('-d', '--dest', required=False, type=str, default='../data', 
+                        help='The path for the recorded audio')
+    # Unstable options
+    parser.add_argument('-s', '--station', required=False, type=str, default='classical', 
+                        help='The type of station to record. This option accesses preconfigured urls for Provo, UT',
+                        choices=['classical', 'rock', 'country', 'talk'])
     parser.add_argument('--break_on_song', required=False, type=int, default=False, 
                         help='Whether to break on song changes (may be problematic if radio and stream are out of sync).')
     
 
     args = parser.parse_args()
 
-    main(args.station,
-        args.dest,
+    main(args.frequency,
+        args.url,
         args.rate,
         args.duration,
+        args.dest,
+        args.station,
         args.break_on_song)

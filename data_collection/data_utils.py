@@ -6,6 +6,8 @@ import re
 import unicodedata
 from datetime import datetime
 import os
+from http.client import RemoteDisconnected
+from urllib.error import HTTPError
 
 def get_url(station):
     """Gets the streaming url for a type of music. This url can be obtained from the
@@ -80,7 +82,8 @@ def get_song_name(station):
     response = request.urlopen(req)
     metaint = int(response.headers['icy-metaint'])
 
-    for _ in range(10): # title may be empty initially, try several times
+    loop_limit = 10
+    for i in range(loop_limit): # title may be empty initially, try several times
 
         response.read(metaint)  # skip to metadata
         metadata_length = struct.unpack('B', response.read(1))[0] * 16  # length byte
@@ -92,9 +95,14 @@ def get_song_name(station):
         elif station == 'rock':
             metadata = metadata.decode(encoding, errors='ignore')
             # print(metadata)
-            artist = re.search(r'StreamTitle(.*?)text', metadata).group(1)
-            song_title = re.search(r'text(.*?)song_spot', metadata).group(1)
-            return convert_to_filestring(artist + song_title)
+            try:
+                artist = re.search(r'StreamTitle(.*?)text', metadata).group(1)
+                song_title = re.search(r'text(.*?)song_spot', metadata).group(1)
+                return convert_to_filestring(artist + song_title)
+            except AttributeError:
+                if i == loop_limit - 1:
+                    return 'NoSongNameGiven'
+                continue
         else:
             # extract title from the metadata
             m = re.search(br"StreamTitle='([^']*)';", metadata)
@@ -117,7 +125,14 @@ def monitor_song_name(station, duration, break_on_song):
     start_time = time.time()
     while True:
         time.sleep(1)
-        new_song = get_song_name(station)
+        for i in range(10):
+            try:
+                new_song = get_song_name(station)
+                break
+            except (RemoteDisconnected, HTTPError):
+                time.sleep(1)
+                print("remote disconnected, attempt:", i)
+
         if break_on_song and new_song != song:
             return new_song
         if (time.time() - start_time) > (60*duration):
