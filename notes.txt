@@ -1,0 +1,10 @@
+Two approaches:
+U-Net on Magnitude (normal spectrogram) 
+    - Why it might work: Empirical evidence shows that our ears are very sensitive to magnitude, and somewhat sensitive to phase. Thus these might be the optimal features.
+    - Drawback: Could be throwing away good information from the complex spectrogram.
+U-Net on complex numbers
+    - Drawback: Magnitude and phase may be better features, it is unnecessary to make the network learn those features.
+
+Experiments:
+    - Take magnitude spectrogram from clean audio, add it to the phase spectrogram from noisy audio, do an IFT back to time domain, see how much of a difference phase makes.
+        - If the difference due to phase is small, we may be able to get away with denoising radio purely based on magnitude spectrogram
