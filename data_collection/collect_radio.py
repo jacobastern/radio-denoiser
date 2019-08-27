@@ -4,7 +4,7 @@ import time
 from queue import Empty as QueueEmpty
 from .data_utils import get_file_path
 
-def collect_radio(parent_queue, song_name, station='rock', dest='work/data', rate=44100):
+def collect_radio(parent_queue, freq, genre='rock', rate=44100, dest='work/data'):
     """Records a radio signal at the given station until it receives a quit signal from
     its parent process
     Args:
@@ -14,25 +14,9 @@ def collect_radio(parent_queue, song_name, station='rock', dest='work/data', rat
         dest (str): the destination for the song files
         rate (int): the rate at which to record samples
     """
-    
-    if station == 'classical':
-        # 89.1 KBYU Classical
-        # Note: the radio transmission is about 3 minutes ahead of the online stream
-        freq = '89.1M'
-    elif station == 'country':
-        # 97.7 The Wolf
-        freq = '97.7M'
-    elif station == 'talk':
-        # 102.7 KSL News Radio
-        freq = '97.5M'
-    elif station == 'rock':
-        # 106.7 KAAZ-FM
-        freq = '106.7M'
-    else:
-        raise TypeError("Invalid station")
 
-    raw_file_path = get_file_path(song_name, station, dest, audio_type='radio', ending='.raw')
-    wav_file_path = os.path.splitext(raw_file_path)[0] + '.wav'
+    raw_file_path = get_file_path(genre, dest, audio_type='radio', ending='.raw')
+    wav_file_path = get_file_path(genre, dest, audio_type='radio', ending='.wav')
 
     rate = str(rate / 1000) + 'k'
     

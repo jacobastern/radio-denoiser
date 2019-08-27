@@ -22,18 +22,28 @@ cd docker
 docker build -t deep-learning-pytorch -f Dockerfile . --rm
 ```
 3. Run a docker container based on that image: 
+
+Option 1: (easy but less secure). Give the container access to all devices on the host, including filesystems.
 ```bash
 cd ..
-nvidia-docker run -it --name data-collection --rm -v $(pwd):/code -v path/to/data:data deep-learning-pytorch
+nvidia-docker run -it --privileged --name data-collection --rm -v $(pwd):/code -v path/to/data:data deep-learning-pytorch
 ```
 4. Pick an radio statio to record.
     - Find a local (FM) radio station that is also streamed over the internet.
     - Obtain the streaming url as described in [this video](https://www.youtube.com/watch?v=J3Es00azAT4).
 
 5. Run:
-        `python3 data_collect_main.py --frequency <radio_freq> --url <streaming_url> --format <streamed_format>`
-    For example,
-        `python3 data_collect_main.py --frequency 89.1 --url http://cdn.byub.org/classical89/classical89_mp3 --format .mp3`
+```bash
+python3 data_collect_main.py -f <radio_freq> -u <streaming_url> -s <stream_format>
+```
+For example,
+```bash
+python3 data_collect_main.py --frequency 89.1 --url http://cdn.byub.org/classical89/classical89_mp3 -s .mp3
+```
+To see additional options, run:
+```bash
+python3 data_collect_main.py --help
+```
 
 `data_collect_main.py` collects streamed and broadcast radio in its native format and converts it to signed-16-bit-little-endian, 44.1kHz, single-channel `.wav` files. If it doesn't work with the default `--format`, which is `.aac`, try `.mp3`.
 
