@@ -23,11 +23,13 @@ docker build -t deep-learning-pytorch -f Dockerfile . --rm
 ```
 3. Run a docker container based on that image: 
 
-Option 1: (easy but less secure). Give the container access to all devices on the host, including filesystems.
+Option 1: (easy but insecure). Give the container access to all devices on the host, including filesystems.
 ```bash
 cd ..
-nvidia-docker run -it --privileged --name data-collection --rm -v $(pwd):/code -v path/to/data:data deep-learning-pytorch
+docker run -it --privileged --name data-collection --rm -v $(pwd):/code -v path/to/data:data deep-learning-pytorch
 ```
+Option 2: Use the `--device` flag for `docker run`.
+
 4. Pick an radio statio to record.
     - Find a local (FM) radio station that is also streamed over the internet.
     - Obtain the streaming url as described in [this video](https://www.youtube.com/watch?v=J3Es00azAT4).
